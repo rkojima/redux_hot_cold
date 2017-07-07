@@ -2,16 +2,30 @@ import * as actions from '../actions/index';
 
 // Initial game state: Need numberToGuess, number of guesses=0, whether guessed correctly=false, 
 
-function createGame() {
-    return {
-        guess: 0,
-        guessFeedback: "", 
-        numbersGuessed: [],
-        mysteryNumber: (Math.floor(Math.random() * 100) + 1),
-        guessedAlready: false,
-        isSolved: false,
-        fewestGuesses: null,
+function createGame(prevGame) {
+    if (prevGame === undefined) {
+        return {
+            guess: 0,
+            guessFeedback: "", 
+            numbersGuessed: [],
+            mysteryNumber: (Math.floor(Math.random() * 100) + 1),
+            guessedAlready: false,
+            isSolved: false,
+            fewestGuesses: null,
+        }
     }
+    else {
+        return {
+            guess: 0,
+            guessFeedback: "", 
+            numbersGuessed: [],
+            mysteryNumber: (Math.floor(Math.random() * 100) + 1),
+            guessedAlready: false,
+            isSolved: false,
+            fewestGuesses: prevGame.fewestGuesses,
+        }
+    }
+    
 }
 
 const initialGameState = createGame();
@@ -19,7 +33,7 @@ const initialGameState = createGame();
 export const repositoryReducer = (state = initialGameState, action) => {
     
     if (action.type === 'CREATE_GAME') {
-        return createGame();
+        return createGame(state);
     }
 
     else if (action.type === 'GUESS_NUMBER') {
@@ -56,7 +70,6 @@ export const repositoryReducer = (state = initialGameState, action) => {
         let newState = Object.assign({}, state, {
             fewestGuesses: action.numberOfGuesses,
         });
-        console.log("New State: " + newState);
         return newState;
     }
 

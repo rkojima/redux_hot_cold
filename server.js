@@ -22,16 +22,18 @@ app.get('/fewest-guesses', (req, res) => {
 });
 
 app.post('/fewest-guesses', jsonParser, (req, res) => {
-    console.log(req.body);
-    if (!app.locals.fewestGuesses || req.body < app.locals.fewestGuesses) {
-        console.log("I was here");
+    if (!app.locals.fewestGuesses || req.body.numberGuesses < app.locals.fewestGuesses) {
         app.locals.fewestGuesses = req.body.numberGuesses;
-        console.log(app.locals.fewestGuesses);
-        res.send("Record updated");
+        res.json({
+            isRecordUpdated: true,
+            fewestGuesses: app.locals.fewestGuesses,
+        });
     }
 
     else {
-        res.send("Record not updated");
+        res.json({
+            isRecordUpdated: false
+        });
     }
 });
 

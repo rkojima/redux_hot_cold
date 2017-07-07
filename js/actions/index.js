@@ -49,9 +49,8 @@ export const saveFewestGuessesSuccess = (numberOfGuesses) => ({
 });
 
 export const SAVE_FEWEST_GUESSES_NOPE = 'SAVE_FEWEST_GUESSES_NOPE';
-export const saveFewestGuessesNope = (guesses) => ({
+export const saveFewestGuessesNope = () => ({
     type: SAVE_FEWEST_GUESSES_NOPE,
-    guesses
 });
 
 export const SAVE_FEWEST_GUESSES_ERROR = 'SAVE_FEWEST_GUESSES_ERROR';
@@ -61,7 +60,6 @@ export const saveFewestGuessesError = (error) => ({
 });
 
 export function checkSaveFewestGuesses(guesses) {
-    console.log(guesses)
     return function (dispatch) {
         // dispatch(saveFewestGuesses(guesses))
 
@@ -82,13 +80,14 @@ export function checkSaveFewestGuesses(guesses) {
             body: JSON.stringify(payload)
         })
         .then(
-            response => {
-                console.log(response);
-                if(response === "Record updated") {
-                    console.log("Record updated");
-                    dispatch(saveFewestGuessesSuccess());
+            response => response.json()
+        )
+        .then(
+            data => {
+                if(data.isRecordUpdated === true) {
+                    dispatch(saveFewestGuessesSuccess(data.fewestGuesses));
                 }
-                else if (response === "Record not updated") {
+                else if (data === false) {
                     dispatch(saveFewestGuessesNope());
                 }
             error => dispatch(saveFewestGuessesError(error));
