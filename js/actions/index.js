@@ -61,12 +61,31 @@ export const saveFewestGuessesError = (error) => ({
 });
 
 export function checkSaveFewestGuesses(guesses) {
+    console.log(guesses)
     return function (dispatch) {
         // dispatch(saveFewestGuesses(guesses))
-        return fetch("http://localhost:8080/fewest-guesses", {method: 'POST', body: guesses})
+
+        var payload = {
+            numberGuesses: guesses,
+        };
+
+        // var data = new FormData();
+        // data.append("json", JSON.stringify(payload));
+    // console.log(JSON.stringify(payload));
+
+        return fetch("http://localhost:5000/fewest-guesses", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
         .then(
             response => {
+                console.log(response);
                 if(response === "Record updated") {
+                    console.log("Record updated");
                     dispatch(saveFewestGuessesSuccess());
                 }
                 else if (response === "Record not updated") {

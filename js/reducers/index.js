@@ -56,7 +56,7 @@ export const repositoryReducer = (state = initialGameState, action) => {
         let newState = Object.assign({}, state, {
             fewestGuesses: action.numberOfGuesses,
         });
-        console.log(newState);
+        console.log("New State: " + newState);
         return newState;
     }
 
